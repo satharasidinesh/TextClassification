@@ -1,2 +1,3 @@
 # TextClassification
-classifying comments into positives or negative using keras
+classifs comments into positives or negative using keras
+
