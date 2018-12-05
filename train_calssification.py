@@ -5,7 +5,7 @@ Created on Wed Nov 28 10:43:11 2018
 @author: Dinesh Satharasi
 """
 
-
+import pickle
 import pandas as pd
 import numpy as np
 import re
@@ -58,15 +58,21 @@ Y_test = keras.utils.to_categorical(Y_test, num_classes)
 model = Sequential()
 model.add(Dense(512,input_shape = (max_words,)))
 model.add(Activation('relu'))
-model.add(Dropout(0.5))
+model.add(Dropout(0.5))  #used dropout so that wont depends much on privious layer
 model.add(Dense(256))
 model.add(Activation('relu'))
 model.add(Dropout(0.3))
 model.add(Dense(num_classes))
-model.add(Activation('softmax'))
+model.add(Activation('softmax')) #for probability output
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam',metrics = ['accuracy'])
 
 
 history  = model.fit(X_train,Y_train, batch_size = 32, epochs = 4, verbose = 1, validation_split = 0.1)
 score = model.evaluate(X_test, Y_test, batch_size = 32, verbose = 1)
 print(score)
+
+model.model.save('comments_classifier.h5')
+
+# Save Tokenizer ,same tokenizer should use while inference
+with open('tokenizer.pickle', 'wb') as handle:
+    pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
